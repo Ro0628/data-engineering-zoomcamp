@@ -4,6 +4,8 @@ locals {
 
 variable "project" {
   description = "Your GCP Project ID"
+  default = "my-rides-ro"
+  type = string
 }
 
 variable "region" {
