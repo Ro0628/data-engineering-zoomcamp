@@ -1,0 +1,927 @@
+  build       Build or rebuild services
+  convert     Converts the compose file to platform's canonical format
+  cp          Copy files/folders between a service container and the local filesystem
+  create      Creates containers for a service.
+  down        Stop and remove containers, networks
+  events      Receive real time events from containers.
+  exec        Execute a command in a running container.
+  images      List images used by the created containers
+  kill        Force stop service containers.
+  logs        View output from containers
+  ls          List running compose projects
+  pause       Pause services
+  port        Print the public port for a port binding.
+  ps          List containers
+  pull        Pull service images
+  push        Push service images
+  restart     Restart service containers
+  rm          Removes stopped service containers
+  run         Run a one-off command on a service.
+  start       Start services
+  stop        Stop services
+  top         Display the running processes
+  unpause     Unpause services
+  up          Create and start containers
+  version     Show the Docker Compose version information
+
+Run 'docker compose COMMAND --help' for more information on a command.
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+[+] Running 2/2
+ ⠿ Container 2_docker_sql-pgadmin-1     Running             0.0s
+ ⠿ Container 2_docker_sql-pgdatabase-1  Started             0.4s
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker ps
+CONTAINER ID   IMAGE            COMMAND                  CREATED      STATUS          PORTS                                            NAMES
+279780960f21   postgres:13      "docker-entrypoint.s…"   3 days ago   Up 13 seconds   0.0.0.0:5432->5432/tcp, :::5432->5432/tcp        2_docker_sql-pgdatabase-1
+2ecc7d43aeaf   dpage/pgadmin4   "/entrypoint.sh"         3 days ago   Up 25 minutes   443/tcp, 0.0.0.0:8080->80/tcp, :::8080->80/tcp   2_docker_sql-pgadmin-1
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker run -it   -e POSTGRES_USER="root"   -e POSTGRES_PASSWORD="root"   -e POSTGRES_DB="ny_taxi"   -v $(pwd)/ny_taxi_postgres_data:/var/lib/postgresql/data   -p 5432:5432   postgres:13
+docker: Error response from daemon: driver failed programming external connectivity on endpoint pensive_cerf (a2d25eb8bbc46c473a06915fba9395f88d481b44971b38a3c56b08487088504d): Bind for 0.0.0.0:5432 failed: port is already allocated.
+ERRO[0000] error waiting for container: context canceled 
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker stop 2_docker_sql-pgdatabase-1
+2_docker_sql-pgdatabase-1
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker ps
+CONTAINER ID   IMAGE            COMMAND            CREATED      STATUS          PORTS                                            NAMES
+2ecc7d43aeaf   dpage/pgadmin4   "/entrypoint.sh"   3 days ago   Up 28 minutes   443/tcp, 0.0.0.0:8080->80/tcp, :::8080->80/tcp   2_docker_sql-pgadmin-1
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker run -it   -e POSTGRES_USER="root"   -e POSTGRES_PASSWORD="root"   -e POSTGRES_DB="ny_taxi"   -v $(pwd)/ny_taxi_postgres_data:/var/lib/postgresql/data   -p 5432:5432   postgres:13
+
+PostgreSQL Database directory appears to contain a database; Skipping initialization
+
+2023-01-31 22:09:25.537 UTC [1] LOG:  starting PostgreSQL 13.9 (Debian 13.9-1.pgdg110+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2023-01-31 22:09:25.537 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2023-01-31 22:09:25.537 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+2023-01-31 22:09:25.541 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-31 22:09:25.547 UTC [25] LOG:  database system was shut down at 2023-01-31 22:08:07 UTC
+2023-01-31 22:09:25.553 UTC [1] LOG:  database system is ready to accept connections
+^[[B^[[A^[[A^C2023-01-31 22:13:14.341 UTC [1] LOG:  received fast shutdown request
+2023-01-31 22:13:14.343 UTC [1] LOG:  aborting any active transactions
+2023-01-31 22:13:14.347 UTC [1] LOG:  background worker "logical replication launcher" (PID 31) exited with exit code 1
+2023-01-31 22:13:14.350 UTC [26] LOG:  shutting down
+2023-01-31 22:13:14.364 UTC [1] LOG:  database system is shut down
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker ps
+CONTAINER ID   IMAGE            COMMAND            CREATED      STATUS          PORTS                                            NAMES
+2ecc7d43aeaf   dpage/pgadmin4   "/entrypoint.sh"   3 days ago   Up 33 minutes   443/tcp, 0.0.0.0:8080->80/tcp, :::8080->80/tcp   2_docker_sql-pgadmin-1
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+[+] Running 2/2
+ ⠿ Container 2_docker_sql-pgdatabase-1  Star...                                       0.4s
+ ⠿ Container 2_docker_sql-pgadmin-1     Running                                       0.0s
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgdatabase" refers to undefined volume $(pwd)/ny_taxi_postgres_data: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgdatabase" refers to undefined volume (pwd)/ny_taxi_postgres_data: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgdatabase" refers to undefined volume $(pwd)/ny_taxi_postgres_data: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgdatabase" refers to undefined volume $(pwd)/ny_taxi_postgres_data: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+[+] Running 2/0
+ ⠿ Container 2_docker_sql-pgadmin-1     Running                                       0.0s
+ ⠿ Container 2_docker_sql-pgdatabase-1  Runn...                                       0.0s
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker ps
+CONTAINER ID   IMAGE            COMMAND                  CREATED      STATUS          PORTS                                            NAMES
+279780960f21   postgres:13      "docker-entrypoint.s…"   3 days ago   Up 6 minutes    0.0.0.0:5432->5432/tcp, :::5432->5432/tcp        2_docker_sql-pgdatabase-1
+2ecc7d43aeaf   dpage/pgadmin4   "/entrypoint.sh"         3 days ago   Up 40 minutes   443/tcp, 0.0.0.0:8080->80/tcp, :::8080->80/tcp   2_docker_sql-pgadmin-1
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker ps
+CONTAINER ID   IMAGE            COMMAND                  CREATED      STATUS          PORTS                                            NAMES
+279780960f21   postgres:13      "docker-entrypoint.s…"   3 days ago   Up 7 minutes    0.0.0.0:5432->5432/tcp, :::5432->5432/tcp        2_docker_sql-pgdatabase-1
+2ecc7d43aeaf   dpage/pgadmin4   "/entrypoint.sh"         3 days ago   Up 41 minutes   443/tcp, 0.0.0.0:8080->80/tcp, :::8080->80/tcp   2_docker_sql-pgadmin-1
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ ^C
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ ^C
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker ps
+CONTAINER ID   IMAGE            COMMAND                  CREATED      STATUS          PORTS                                            NAMES
+279780960f21   postgres:13      "docker-entrypoint.s…"   3 days ago   Up 14 minutes   0.0.0.0:5432->5432/tcp, :::5432->5432/tcp        2_docker_sql-pgdatabase-1
+2ecc7d43aeaf   dpage/pgadmin4   "/entrypoint.sh"         3 days ago   Up 48 minutes   443/tcp, 0.0.0.0:8080->80/tcp, :::8080->80/tcp   2_docker_sql-pgadmin-1
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docke4r network create pg-network
+
+Command 'docke4r' not found, did you mean:
+
+  command 'docker' from snap docker (20.10.17)
+  command 'docker' from deb docker.io (20.10.12-0ubuntu2~20.04.1)
+
+See 'snap info <snapname>' for additional versions.
+
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network create pg-network
+1f2dcb079cecda3a5c6bcf4da6c016c0229d51c663c3b804c7cbce978246fa22
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgdatabase" refers to undefined network pg-network: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker ps
+CONTAINER ID   IMAGE            COMMAND                  CREATED      STATUS          PORTS                                            NAMES
+279780960f21   postgres:13      "docker-entrypoint.s…"   3 days ago   Up 19 minutes   0.0.0.0:5432->5432/tcp, :::5432->5432/tcp        2_docker_sql-pgdatabase-1
+2ecc7d43aeaf   dpage/pgadmin4   "/entrypoint.sh"         3 days ago   Up 53 minutes   443/tcp, 0.0.0.0:8080->80/tcp, :::8080->80/tcp   2_docker_sql-pgadmin-1
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ ls
+Dockerfile                  ingest_data.py            taxi+_zone_lookup.csv
+README.md                   ny_taxi_postgres_data     upload-data.ipynb
+docker-compose.yaml         pg-test-connection.ipynb
+green_tripdata_2019-01.csv  pipeline.py
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ jupyter notebook upload-data.ipynb 
+[W 2023-01-31 22:40:08.661 LabApp] 'file_to_run' has moved from NotebookApp to ServerApp. This config will be passed to ServerApp. Be sure to update your config before our next release.
+[W 2023-01-31 22:40:08.662 LabApp] 'file_to_run' has moved from NotebookApp to ServerApp. This config will be passed to ServerApp. Be sure to update your config before our next release.
+[I 2023-01-31 22:40:08.671 LabApp] JupyterLab extension loaded from /home/ronaldajohnson/anaconda3/lib/python3.9/site-packages/jupyterlab
+[I 2023-01-31 22:40:08.671 LabApp] JupyterLab application directory is /home/ronaldajohnson/anaconda3/share/jupyter/lab
+[I 22:40:08.677 NotebookApp] Serving notebooks from local directory: /home/ronaldajohnson/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql
+[I 22:40:08.677 NotebookApp] Jupyter Notebook 6.4.12 is running at:
+[I 22:40:08.677 NotebookApp] http://localhost:8888/?token=407e95c2734e2e1c373cde852f63b948b16182c1e11d9f9b
+[I 22:40:08.677 NotebookApp]  or http://127.0.0.1:8888/?token=407e95c2734e2e1c373cde852f63b948b16182c1e11d9f9b
+[I 22:40:08.677 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 22:40:08.688 NotebookApp] 
+    
+    To access the notebook, open this file in a browser:
+        file:///home/ronaldajohnson/.local/share/jupyter/runtime/nbserver-8488-open.html
+    Or copy and paste one of these URLs:
+        http://localhost:8888/?token=407e95c2734e2e1c373cde852f63b948b16182c1e11d9f9b
+     or http://127.0.0.1:8888/?token=407e95c2734e2e1c373cde852f63b948b16182c1e11d9f9b
+[I 22:40:20.787 NotebookApp] 302 GET /?token=407e95c2734e2e1c373cde852f63b948b16182c1e11d9f9b (127.0.0.1) 0.870000ms
+[W 22:40:29.686 NotebookApp] Notebook upload-data.ipynb is not trusted
+[I 22:40:30.425 NotebookApp] Kernel started: 3ea4a644-3811-4585-8a49-cf26679473e9, name: python3
+[I 22:42:30.594 NotebookApp] Saving file at /upload-data.ipynb
+/home/ronaldajohnson/anaconda3/lib/python3.9/site-packages/nbformat/__init__.py:128: MissingIDFieldWarning: Code cell is missing an id field, this will become a hard error in future nbformat versions. You may want to use `normalize()` on your notebooks before validations (available since nbformat 5.1.4). Previous versions of nbformat are fixing this issue transparently, and will stop doing so in the future.
+  validate(nb)
+/home/ronaldajohnson/anaconda3/lib/python3.9/site-packages/notebook/services/contents/manager.py:353: MissingIDFieldWarning: Code cell is missing an id field, this will become a hard error in future nbformat versions. You may want to use `normalize()` on your notebooks before validations (available since nbformat 5.1.4). Previous versions of nbformat are fixing this issue transparently, and will stop doing so in the future.
+  validate_nb(model['content'])
+[I 22:44:30.638 NotebookApp] Saving file at /upload-data.ipynb
+[I 22:48:16.788 NotebookApp] Starting buffering for 3ea4a644-3811-4585-8a49-cf26679473e9:7a075268347945a88719d1be088f2252
+1f2dcb079cecda3a5c6bcf4da6c016c0229d51c663c3b804c7cbce978246fa22^C[I 22:54:00.648 NotebookApp] interrupted
+Serving notebooks from local directory: /home/ronaldajohnson/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql
+1 active kernel
+Jupyter Notebook 6.4.12 is running at:
+http://localhost:8888/?token=407e95c2734e2e1c373cde852f63b948b16182c1e11d9f9b
+ or http://127.0.0.1:8888/?token=407e95c2734e2e1c373cde852f63b948b16182c1e11d9f9b
+Shutdown this notebook server (y/[n])? No answer for 5s: resuming operation...
+y
+^C[I 22:54:14.381 NotebookApp] interrupted
+Serving notebooks from local directory: /home/ronaldajohnson/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql
+1 active kernel
+Jupyter Notebook 6.4.12 is running at:
+http://localhost:8888/?token=407e95c2734e2e1c373cde852f63b948b16182c1e11d9f9b
+ or http://127.0.0.1:8888/?token=407e95c2734e2e1c373cde852f63b948b16182c1e11d9f9b
+Shutdown this notebook server (y/[n])? y
+[C 22:54:18.746 NotebookApp] Shutdown confirmed
+[I 22:54:18.746 NotebookApp] Shutting down 1 kernel
+[I 22:54:18.747 NotebookApp] Kernel shutdown: 3ea4a644-3811-4585-8a49-cf26679473e9
+[I 22:54:19.264 NotebookApp] Shutting down 0 terminals
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ jupyter nbconvert --to=script upload-data.ipynb 
+[NbConvertApp] Converting notebook upload-data.ipynb to script
+[NbConvertApp] Writing 1855 bytes to upload-data.py
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker build -help
+unknown shorthand flag: 'e' in -elp
+See 'docker build --help'.
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker build 
+"docker build" requires exactly 1 argument.
+See 'docker build --help'.
+
+Usage:  docker build [OPTIONS] PATH | URL | -
+
+Build an image from a Dockerfile
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker build -t taxi_ingest:v001
+"docker build" requires exactly 1 argument.
+See 'docker build --help'.
+
+Usage:  docker build [OPTIONS] PATH | URL | -
+
+Build an image from a Dockerfile
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker build -t taxi_ingest:v001 .
+error checking context: 'can't stat '/home/ronaldajohnson/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql/ny_taxi_postgres_data''.
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgdatabase" refers to undefined network pg-network: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker ps
+CONTAINER ID   IMAGE            COMMAND                  CREATED      STATUS             PORTS                                            NAMES
+279780960f21   postgres:13      "docker-entrypoint.s…"   3 days ago   Up About an hour   0.0.0.0:5432->5432/tcp, :::5432->5432/tcp        2_docker_sql-pgdatabase-1
+2ecc7d43aeaf   dpage/pgadmin4   "/entrypoint.sh"         3 days ago   Up 2 hours         443/tcp, 0.0.0.0:8080->80/tcp, :::8080->80/tcp   2_docker_sql-pgadmin-1
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker stop
+"docker stop" requires at least 1 argument.
+See 'docker stop --help'.
+
+Usage:  docker stop [OPTIONS] CONTAINER [CONTAINER...]
+
+Stop one or more running containers
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker stop postgres:13
+Error response from daemon: No such container: postgres:13
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker stop 2_docker_sql-pgdatabase-1
+2_docker_sql-pgdatabase-1
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgdatabase" refers to undefined network pg-network: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network create pg-network
+Error response from daemon: network with name pg-network already exists
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgdatabase" refers to undefined network pg-network: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgadmin" refers to undefined network pg-network: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker ps
+CONTAINER ID   IMAGE            COMMAND            CREATED      STATUS       PORTS                                            NAMES
+2ecc7d43aeaf   dpage/pgadmin4   "/entrypoint.sh"   3 days ago   Up 2 hours   443/tcp, 0.0.0.0:8080->80/tcp, :::8080->80/tcp   2_docker_sql-pgadmin-1
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgdatabase" refers to undefined network pg-network: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgdatabase" refers to undefined volume $(pwd)/ny_taxi_postgres_data: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgdatabase" refers to undefined network pg-network: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgadmin" refers to undefined network pg-network: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network create pg-network
+Error response from daemon: network with name pg-network already exists
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ 
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network create pg-network
+Error response from daemon: network with name pg-network already exists
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+[+] Running 2/2
+ ⠿ Container 2_docker_sql-pgadmin-1     Running                                       0.0s
+ ⠿ Container 2_docker_sql-pgdatabase-1  Star...                                       0.6s
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgdatabase" refers to undefined network pg-network: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network 
+
+Usage:  docker network COMMAND
+
+Manage networks
+
+Commands:
+  connect     Connect a container to a network
+  create      Create a network
+  disconnect  Disconnect a container from a network
+  inspect     Display detailed information on one or more networks
+  ls          List networks
+  prune       Remove all unused networks
+  rm          Remove one or more networks
+
+Run 'docker network COMMAND --help' for more information on a command.
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network rm pg-network 
+pg-network
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network create pg-network
+963126434b55249d5db4b121c1d39239837b9e11051a327087a13dd0b02a5e11
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgadmin" refers to undefined network pg-network: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network ls
+NETWORK ID     NAME                   DRIVER    SCOPE
+61faa7e2027e   2_docker_sql_default   bridge    local
+a3cebd1fd1a1   bridge                 bridge    local
+5892e01b7bcc   host                   host      local
+b963ade30aa2   none                   null      local
+963126434b55   pg-network             bridge    local
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker netwrk -inspect
+unknown shorthand flag: 'i' in -inspect
+See 'docker --help'.
+
+Usage:  docker [OPTIONS] COMMAND
+
+A self-sufficient runtime for containers
+
+Options:
+      --config string      Location of client config files (default
+                           "/home/ronaldajohnson/.docker")
+  -c, --context string     Name of the context to use to connect to the daemon
+                           (overrides DOCKER_HOST env var and default context set
+                           with "docker context use")
+  -D, --debug              Enable debug mode
+  -H, --host list          Daemon socket(s) to connect to
+  -l, --log-level string   Set the logging level
+                           ("debug"|"info"|"warn"|"error"|"fatal") (default "info")
+      --tls                Use TLS; implied by --tlsverify
+      --tlscacert string   Trust certs signed only by this CA (default
+                           "/home/ronaldajohnson/.docker/ca.pem")
+      --tlscert string     Path to TLS certificate file (default
+                           "/home/ronaldajohnson/.docker/cert.pem")
+      --tlskey string      Path to TLS key file (default
+                           "/home/ronaldajohnson/.docker/key.pem")
+      --tlsverify          Use TLS and verify the remote
+  -v, --version            Print version information and quit
+
+Management Commands:
+  builder     Manage builds
+  config      Manage Docker configs
+  container   Manage containers
+  context     Manage contexts
+  image       Manage images
+  manifest    Manage Docker image manifests and manifest lists
+  network     Manage networks
+  node        Manage Swarm nodes
+  plugin      Manage plugins
+  secret      Manage Docker secrets
+  service     Manage services
+  stack       Manage Docker stacks
+  swarm       Manage Swarm
+  system      Manage Docker
+  trust       Manage trust on Docker images
+  volume      Manage volumes
+
+Commands:
+  attach      Attach local standard input, output, and error streams to a running container
+  build       Build an image from a Dockerfile
+  commit      Create a new image from a container's changes
+  cp          Copy files/folders between a container and the local filesystem
+  create      Create a new container
+  diff        Inspect changes to files or directories on a container's filesystem
+  events      Get real time events from the server
+  exec        Run a command in a running container
+  export      Export a container's filesystem as a tar archive
+  history     Show the history of an image
+  images      List images
+  import      Import the contents from a tarball to create a filesystem image
+  info        Display system-wide information
+  inspect     Return low-level information on Docker objects
+  kill        Kill one or more running containers
+  load        Load an image from a tar archive or STDIN
+  login       Log in to a Docker registry
+  logout      Log out from a Docker registry
+  logs        Fetch the logs of a container
+  pause       Pause all processes within one or more containers
+  port        List port mappings or a specific mapping for the container
+  ps          List containers
+  pull        Pull an image or a repository from a registry
+  push        Push an image or a repository to a registry
+  rename      Rename a container
+  restart     Restart one or more containers
+  rm          Remove one or more containers
+  rmi         Remove one or more images
+  run         Run a command in a new container
+  save        Save one or more images to a tar archive (streamed to STDOUT by default)
+  search      Search the Docker Hub for images
+  start       Start one or more stopped containers
+  stats       Display a live stream of container(s) resource usage statistics
+  stop        Stop one or more running containers
+  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+  top         Display the running processes of a container
+  unpause     Unpause all processes within one or more containers
+  update      Update configuration of one or more containers
+  version     Show the Docker version information
+  wait        Block until one or more containers stop, then print their exit codes
+
+Run 'docker COMMAND --help' for more information on a command.
+
+To get more help with docker, check out our guides at https://docs.docker.com/go/guides/
+
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network inspect
+"docker network inspect" requires at least 1 argument.
+See 'docker network inspect --help'.
+
+Usage:  docker network inspect [OPTIONS] NETWORK [NETWORK...]
+
+Display detailed information on one or more networks
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network inspect pg-network 
+[
+    {
+        "Name": "pg-network",
+        "Id": "963126434b55249d5db4b121c1d39239837b9e11051a327087a13dd0b02a5e11",
+        "Created": "2023-01-31T23:37:59.919824856Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.20.0.0/16",
+                    "Gateway": "172.20.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {},
+        "Options": {},
+        "Labels": {}
+    }
+]
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network rm pg-network
+pg-network
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network ls
+NETWORK ID     NAME                   DRIVER    SCOPE
+61faa7e2027e   2_docker_sql_default   bridge    local
+a3cebd1fd1a1   bridge                 bridge    local
+5892e01b7bcc   host                   host      local
+b963ade30aa2   none                   null      local
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker ps
+CONTAINER ID   IMAGE            COMMAND                  CREATED      STATUS         PORTS                                            NAMES
+279780960f21   postgres:13      "docker-entrypoint.s…"   3 days ago   Up 3 minutes   0.0.0.0:5432->5432/tcp, :::5432->5432/tcp        2_docker_sql-pgdatabase-1
+2ecc7d43aeaf   dpage/pgadmin4   "/entrypoint.sh"         3 days ago   Up 2 hours     443/tcp, 0.0.0.0:8080->80/tcp, :::8080->80/tcp   2_docker_sql-pgadmin-1
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker quit
+docker: 'quit' is not a docker command.
+See 'docker --help'
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker
+
+Usage:  docker [OPTIONS] COMMAND
+
+A self-sufficient runtime for containers
+
+Options:
+      --config string      Location of client config files (default
+                           "/home/ronaldajohnson/.docker")
+  -c, --context string     Name of the context to use to connect to the daemon
+                           (overrides DOCKER_HOST env var and default context set
+                           with "docker context use")
+  -D, --debug              Enable debug mode
+  -H, --host list          Daemon socket(s) to connect to
+  -l, --log-level string   Set the logging level
+                           ("debug"|"info"|"warn"|"error"|"fatal") (default "info")
+      --tls                Use TLS; implied by --tlsverify
+      --tlscacert string   Trust certs signed only by this CA (default
+                           "/home/ronaldajohnson/.docker/ca.pem")
+      --tlscert string     Path to TLS certificate file (default
+                           "/home/ronaldajohnson/.docker/cert.pem")
+      --tlskey string      Path to TLS key file (default
+                           "/home/ronaldajohnson/.docker/key.pem")
+      --tlsverify          Use TLS and verify the remote
+  -v, --version            Print version information and quit
+
+Management Commands:
+  builder     Manage builds
+  config      Manage Docker configs
+  container   Manage containers
+  context     Manage contexts
+  image       Manage images
+  manifest    Manage Docker image manifests and manifest lists
+  network     Manage networks
+  node        Manage Swarm nodes
+  plugin      Manage plugins
+  secret      Manage Docker secrets
+  service     Manage services
+  stack       Manage Docker stacks
+  swarm       Manage Swarm
+  system      Manage Docker
+  trust       Manage trust on Docker images
+  volume      Manage volumes
+
+Commands:
+  attach      Attach local standard input, output, and error streams to a running container
+  build       Build an image from a Dockerfile
+  commit      Create a new image from a container's changes
+  cp          Copy files/folders between a container and the local filesystem
+  create      Create a new container
+  diff        Inspect changes to files or directories on a container's filesystem
+  events      Get real time events from the server
+  exec        Run a command in a running container
+  export      Export a container's filesystem as a tar archive
+  history     Show the history of an image
+  images      List images
+  import      Import the contents from a tarball to create a filesystem image
+  info        Display system-wide information
+  inspect     Return low-level information on Docker objects
+  kill        Kill one or more running containers
+  load        Load an image from a tar archive or STDIN
+  login       Log in to a Docker registry
+  logout      Log out from a Docker registry
+  logs        Fetch the logs of a container
+  pause       Pause all processes within one or more containers
+  port        List port mappings or a specific mapping for the container
+  ps          List containers
+  pull        Pull an image or a repository from a registry
+  push        Push an image or a repository to a registry
+  rename      Rename a container
+  restart     Restart one or more containers
+  rm          Remove one or more containers
+  rmi         Remove one or more images
+  run         Run a command in a new container
+  save        Save one or more images to a tar archive (streamed to STDOUT by default)
+  search      Search the Docker Hub for images
+  start       Start one or more stopped containers
+  stats       Display a live stream of container(s) resource usage statistics
+  stop        Stop one or more running containers
+  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+  top         Display the running processes of a container
+  unpause     Unpause all processes within one or more containers
+  update      Update configuration of one or more containers
+  version     Show the Docker version information
+  wait        Block until one or more containers stop, then print their exit codes
+
+Run 'docker COMMAND --help' for more information on a command.
+
+To get more help with docker, check out our guides at https://docs.docker.com/go/guides/
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker rm .
+Error: No such container: .
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker rm 
+"docker rm" requires at least 1 argument.
+See 'docker rm --help'.
+
+Usage:  docker rm [OPTIONS] CONTAINER [CONTAINER...]
+
+Remove one or more containers
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker rm 
+"docker rm" requires at least 1 argument.
+See 'docker rm --help'.
+
+Usage:  docker rm [OPTIONS] CONTAINER [CONTAINER...]
+
+Remove one or more containers
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker ps
+CONTAINER ID   IMAGE            COMMAND                  CREATED      STATUS         PORTS                                            NAMES
+279780960f21   postgres:13      "docker-entrypoint.s…"   3 days ago   Up 4 minutes   0.0.0.0:5432->5432/tcp, :::5432->5432/tcp        2_docker_sql-pgdatabase-1
+2ecc7d43aeaf   dpage/pgadmin4   "/entrypoint.sh"         3 days ago   Up 2 hours     443/tcp, 0.0.0.0:8080->80/tcp, :::8080->80/tcp   2_docker_sql-pgadmin-1
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker rm 
+"docker rm" requires at least 1 argument.
+See 'docker rm --help'.
+
+Usage:  docker rm [OPTIONS] CONTAINER [CONTAINER...]
+
+Remove one or more containers
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker rm 2_docker_sql-pgdatabase-1
+Error response from daemon: You cannot remove a running container 279780960f21c9811f40849600386ea354591cd7e84fde48c12c3f17851d63bd. Stop the container before attempting removal or force remove
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker stop 2_docker_sql-pgdatabase-1
+2_docker_sql-pgdatabase-1
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker rm 2_docker_sql-pgdatabase-1
+2_docker_sql-pgdatabase-1
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker ps
+CONTAINER ID   IMAGE            COMMAND            CREATED      STATUS       PORTS                                            NAMES
+2ecc7d43aeaf   dpage/pgadmin4   "/entrypoint.sh"   3 days ago   Up 2 hours   443/tcp, 0.0.0.0:8080->80/tcp, :::8080->80/tcp   2_docker_sql-pgadmin-1
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker rm 2_docker_sql-pgadmin-1
+Error response from daemon: You cannot remove a running container 2ecc7d43aeaf9a7eb9ac64f95bac99837ffae214ed100999d4ef817a01611798. Stop the container before attempting removal or force remove
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker stop 2_docker_sql-pgadmin-1
+2_docker_sql-pgadmin-1
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ ls
+Dockerfile                  ingest_data.py            taxi+_zone_lookup.csv
+README.md                   ny_taxi_postgres_data     upload-data.ipynb
+docker-compose.yaml         pg-test-connection.ipynb
+green_tripdata_2019-01.csv  pipeline.py
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker create network pg-network
+Unable to find image 'network:latest' locally
+Error response from daemon: pull access denied for network, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network create pg-network
+2244198de3fef9b3b74090782f8c26fabf7270fe33ba3e86eda3cf3d18f90631
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network ls
+NETWORK ID     NAME                   DRIVER    SCOPE
+61faa7e2027e   2_docker_sql_default   bridge    local
+a3cebd1fd1a1   bridge                 bridge    local
+5892e01b7bcc   host                   host      local
+b963ade30aa2   none                   null      local
+2244198de3fe   pg-network             bridge    local
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgdatabase" refers to undefined network pg-network: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network create pg-network
+Error response from daemon: network with name pg-network already exists
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgdatabase" refers to undefined network pg-network: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network create pg-network1
+d1647062b947b85b27fe84d35c46cee9f611147974e361142a006872d893adcd
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgdatabase" refers to undefined network pg-network1: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+services.pgadmin.networks.pg-network Additional property external is not allowed
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ 
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+services.pgadmin Additional property services is not allowed
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+services.pgdatabase Additional property services is not allowed
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgdatabase" refers to undefined network pg-network: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgdatabase" refers to undefined network pg-network: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ sudo chmod a+rwx ny_taxi_postgres_data
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ sudo chmod a+rwx ny_taxi_postgres_data
+chmod: cannot access 'ny_taxi_postgres_data': No such file or directory
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose down
+service "pgadmin" refers to undefined network pg-network: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgadmin" refers to undefined network pg-network: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose down
+service "pgdatabase" refers to undefined network pg-network: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network -ls
+unknown shorthand flag: 'l' in -ls
+See 'docker network --help'.
+
+Usage:  docker network COMMAND
+
+Manage networks
+
+Commands:
+  connect     Connect a container to a network
+  create      Create a network
+  disconnect  Disconnect a container from a network
+  inspect     Display detailed information on one or more networks
+  ls          List networks
+  prune       Remove all unused networks
+  rm          Remove one or more networks
+
+Run 'docker network COMMAND --help' for more information on a command.
+
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network ls
+NETWORK ID     NAME                   DRIVER    SCOPE
+61faa7e2027e   2_docker_sql_default   bridge    local
+a3cebd1fd1a1   bridge                 bridge    local
+5892e01b7bcc   host                   host      local
+b963ade30aa2   none                   null      local
+2244198de3fe   pg-network             bridge    local
+d1647062b947   pg-network1            bridge    local
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network rm pg-network1
+pg-network1
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network ls
+NETWORK ID     NAME                   DRIVER    SCOPE
+61faa7e2027e   2_docker_sql_default   bridge    local
+a3cebd1fd1a1   bridge                 bridge    local
+5892e01b7bcc   host                   host      local
+b963ade30aa2   none                   null      local
+2244198de3fe   pg-network             bridge    local
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+[+] Running 2/2
+ ⠿ Container 2_docker_sql-pgdatabase-1  Star...                                       0.7s
+ ⠿ Container 2_docker_sql-pgadmin-1     Started                                       0.8s
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose down
+[+] Running 3/3
+ ⠿ Container 2_docker_sql-pgadmin-1     Removed                                       1.0s
+ ⠿ Container 2_docker_sql-pgdatabase-1  Remo...                                       0.2s
+ ⠿ Network 2_docker_sql_default         Removed                                       0.1s
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network ls
+NETWORK ID     NAME         DRIVER    SCOPE
+a3cebd1fd1a1   bridge       bridge    local
+5892e01b7bcc   host         host      local
+b963ade30aa2   none         null      local
+2244198de3fe   pg-network   bridge    local
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgdatabase" refers to undefined network pg-network: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose down
+service "pgdatabase" refers to undefined network pg-network: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up
+service "pgadmin" refers to undefined network pg-network: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+[+] Running 3/3
+ ⠿ Network 2_docker_sql_default         Created                                       0.1s
+ ⠿ Container 2_docker_sql-pgdatabase-1  Star...                                       0.8s
+ ⠿ Container 2_docker_sql-pgadmin-1     Started                                       0.7s
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network ls
+NETWORK ID     NAME                   DRIVER    SCOPE
+0b0007684ea7   2_docker_sql_default   bridge    local
+a3cebd1fd1a1   bridge                 bridge    local
+5892e01b7bcc   host                   host      local
+b963ade30aa2   none                   null      local
+2244198de3fe   pg-network             bridge    local
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network rm 2_docker_sql_default 
+Error response from daemon: error while removing network: network 2_docker_sql_default id 0b0007684ea7340a2e2c78edcbf11cc8f9dce2df5a3c221356d87a99b9336b10 has active endpoints
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network
+
+Usage:  docker network COMMAND
+
+Manage networks
+
+Commands:
+  connect     Connect a container to a network
+  create      Create a network
+  disconnect  Disconnect a container from a network
+  inspect     Display detailed information on one or more networks
+  ls          List networks
+  prune       Remove all unused networks
+  rm          Remove one or more networks
+
+Run 'docker network COMMAND --help' for more information on a command.
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network disconnect 2_docker_sql-pgdatabase-1
+"docker network disconnect" requires exactly 2 arguments.
+See 'docker network disconnect --help'.
+
+Usage:  docker network disconnect [OPTIONS] NETWORK CONTAINER
+
+Disconnect a container from a network
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network rm 2_docker_sql_default
+Error response from daemon: error while removing network: network 2_docker_sql_default id 0b0007684ea7340a2e2c78edcbf11cc8f9dce2df5a3c221356d87a99b9336b10 has active endpoints
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker stop 2_docker_sql_default
+Error response from daemon: No such container: 2_docker_sql_default
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker
+
+Usage:  docker [OPTIONS] COMMAND
+
+A self-sufficient runtime for containers
+
+Options:
+      --config string      Location of client config files (default
+                           "/home/ronaldajohnson/.docker")
+  -c, --context string     Name of the context to use to connect to the daemon
+                           (overrides DOCKER_HOST env var and default context set
+                           with "docker context use")
+  -D, --debug              Enable debug mode
+  -H, --host list          Daemon socket(s) to connect to
+  -l, --log-level string   Set the logging level
+                           ("debug"|"info"|"warn"|"error"|"fatal") (default "info")
+      --tls                Use TLS; implied by --tlsverify
+      --tlscacert string   Trust certs signed only by this CA (default
+                           "/home/ronaldajohnson/.docker/ca.pem")
+      --tlscert string     Path to TLS certificate file (default
+                           "/home/ronaldajohnson/.docker/cert.pem")
+      --tlskey string      Path to TLS key file (default
+                           "/home/ronaldajohnson/.docker/key.pem")
+      --tlsverify          Use TLS and verify the remote
+  -v, --version            Print version information and quit
+
+Management Commands:
+  builder     Manage builds
+  config      Manage Docker configs
+  container   Manage containers
+  context     Manage contexts
+  image       Manage images
+  manifest    Manage Docker image manifests and manifest lists
+  network     Manage networks
+  node        Manage Swarm nodes
+  plugin      Manage plugins
+  secret      Manage Docker secrets
+  service     Manage services
+  stack       Manage Docker stacks
+  swarm       Manage Swarm
+  system      Manage Docker
+  trust       Manage trust on Docker images
+  volume      Manage volumes
+
+Commands:
+  attach      Attach local standard input, output, and error streams to a running container
+  build       Build an image from a Dockerfile
+  commit      Create a new image from a container's changes
+  cp          Copy files/folders between a container and the local filesystem
+  create      Create a new container
+  diff        Inspect changes to files or directories on a container's filesystem
+  events      Get real time events from the server
+  exec        Run a command in a running container
+  export      Export a container's filesystem as a tar archive
+  history     Show the history of an image
+  images      List images
+  import      Import the contents from a tarball to create a filesystem image
+  info        Display system-wide information
+  inspect     Return low-level information on Docker objects
+  kill        Kill one or more running containers
+  load        Load an image from a tar archive or STDIN
+  login       Log in to a Docker registry
+  logout      Log out from a Docker registry
+  logs        Fetch the logs of a container
+  pause       Pause all processes within one or more containers
+  port        List port mappings or a specific mapping for the container
+  ps          List containers
+  pull        Pull an image or a repository from a registry
+  push        Push an image or a repository to a registry
+  rename      Rename a container
+  restart     Restart one or more containers
+  rm          Remove one or more containers
+  rmi         Remove one or more images
+  run         Run a command in a new container
+  save        Save one or more images to a tar archive (streamed to STDOUT by default)
+  search      Search the Docker Hub for images
+  start       Start one or more stopped containers
+  stats       Display a live stream of container(s) resource usage statistics
+  stop        Stop one or more running containers
+  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+  top         Display the running processes of a container
+  unpause     Unpause all processes within one or more containers
+  update      Update configuration of one or more containers
+  version     Show the Docker version information
+  wait        Block until one or more containers stop, then print their exit codes
+
+Run 'docker COMMAND --help' for more information on a command.
+
+To get more help with docker, check out our guides at https://docs.docker.com/go/guides/
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker stop 2_docker_sql_default
+Error response from daemon: No such container: 2_docker_sql_default
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network rm 2_docker_sql_default
+Error response from daemon: error while removing network: network 2_docker_sql_default id 0b0007684ea7340a2e2c78edcbf11cc8f9dce2df5a3c221356d87a99b9336b10 has active endpoints
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker container stop 2_docker_sql-pgdatabase-1
+2_docker_sql-pgdatabase-1
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker container stop 2_docker_sql-pgadmin-1
+2_docker_sql-pgadmin-1
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network rm 2_docker_sql_default
+2_docker_sql_default
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+[+] Running 1/3
+ ⠿ Network 2_docker_sql_default         Created                                       0.1s
+ ⠿ Container 2_docker_sql-pgdatabase-1  Star...                                       0.0s
+ ⠿ Container 2_docker_sql-pgadmin-1     Startin...                                    0.0s
+Error response from daemon: network 0b0007684ea7340a2e2c78edcbf11cc8f9dce2df5a3c221356d87a99b9336b10 not found
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network ls
+NETWORK ID     NAME                   DRIVER    SCOPE
+9ef2769331cc   2_docker_sql_default   bridge    local
+a3cebd1fd1a1   bridge                 bridge    local
+5892e01b7bcc   host                   host      local
+b963ade30aa2   none                   null      local
+2244198de3fe   pg-network             bridge    local
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network rm 2_docker_sql_default
+2_docker_sql_default
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker network ls
+NETWORK ID     NAME         DRIVER    SCOPE
+a3cebd1fd1a1   bridge       bridge    local
+5892e01b7bcc   host         host      local
+b963ade30aa2   none         null      local
+2244198de3fe   pg-network   bridge    local
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+[+] Running 1/3
+ ⠿ Network 2_docker_sql_default         Created                                       0.1s
+ ⠿ Container 2_docker_sql-pgdatabase-1  Star...                                       0.0s
+ ⠿ Container 2_docker_sql-pgadmin-1     Startin...                                    0.0s
+Error response from daemon: network 0b0007684ea7340a2e2c78edcbf11cc8f9dce2df5a3c221356d87a99b9336b10 not found
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+[+] Running 0/0
+ ⠿ Container 2_docker_sql-pgadmin-1     Starting                                                                                               0.0s
+ ⠿ Container 2_docker_sql-pgdatabase-1  Starting                                                                                               0.0s
+Error response from daemon: network 0b0007684ea7340a2e2c78edcbf11cc8f9dce2df5a3c221356d87a99b9336b10 not found
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose down
+[+] Running 3/3
+ ⠿ Container 2_docker_sql-pgadmin-1     Removed                                                                                                0.0s
+ ⠿ Container 2_docker_sql-pgdatabase-1  Removed                                                                                                0.0s
+ ⠿ Network 2_docker_sql_default         Removed                                                                                                0.1s
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+[+] Running 3/3
+ ⠿ Network 2_docker_sql_default         Created                                                                                                0.1s
+ ⠿ Container 2_docker_sql-pgadmin-1     Started                                                                                                0.9s
+ ⠿ Container 2_docker_sql-pgdatabase-1  Started                                                                                                0.9s
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker inspect network 2_docker_sql_default
+[
+    {
+        "Name": "2_docker_sql_default",
+        "Id": "380d617e152a78cf4e05836fddc449d3a2a7ddb774224a3257b72c4932c8ebea",
+        "Created": "2023-02-01T00:28:28.98763582Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.26.0.0/16",
+                    "Gateway": "172.26.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "3b238fd65bb4957bbbed4303ec98d26d58c3cecb4626e54cdb68567637b0b6f7": {
+                "Name": "2_docker_sql-pgadmin-1",
+                "EndpointID": "fd5698b6394a7800fc2f73692f2c0a46038a36f8fd757d53e17283239f5b3a1f",
+                "MacAddress": "02:42:ac:1a:00:03",
+                "IPv4Address": "172.26.0.3/16",
+                "IPv6Address": ""
+            },
+            "604973e92ffb12d1dfd472ce409e9056bee26932d19724dd88753f36bf709022": {
+                "Name": "2_docker_sql-pgdatabase-1",
+                "EndpointID": "6715bfffecb832b38138a0ecb92a486648ec9ae2123b2f33a8eb627e9882131b",
+                "MacAddress": "02:42:ac:1a:00:02",
+                "IPv4Address": "172.26.0.2/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {},
+        "Labels": {
+            "com.docker.compose.network": "default",
+            "com.docker.compose.project": "2_docker_sql",
+            "com.docker.compose.version": "2.15.1"
+        }
+    }
+]
+Error: No such object: network
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up -d
+service "pgadmin" refers to undefined network 2_docker_sql_default: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up 
+service "pgdatabase" refers to undefined network 2_docker_sql_default: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose down
+service "pgadmin" refers to undefined network 2_docker_sql_default: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker  down
+docker: 'down' is not a docker command.
+See 'docker --help'
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose down
+service "pgdatabase" refers to undefined network 2_docker_sql_default: invalid compose project
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose down
+[+] Running 3/3
+ ⠿ Container 2_docker_sql-pgadmin-1     Removed                                                                                                1.2s
+ ⠿ Container 2_docker_sql-pgdatabase-1  Removed                                                                                                0.2s
+ ⠿ Network 2_docker_sql_default         Removed                                                                                                0.1s
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ ls
+Dockerfile  docker-compose.yaml         ingest_data.py         ny_taxi_postgres_data_bs  pipeline.py            upload-data.ipynb
+README.md   green_tripdata_2019-01.csv  ny_taxi_postgres_data  pg-test-connection.ipynb  taxi+_zone_lookup.csv
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/2_docker_sql$ docker-compose up 
+[+] Running 3/3
+ ⠿ Network 2_docker_sql_default         Created                                                                                                0.1s
+ ⠿ Container 2_docker_sql-pgdatabase-1  Created                                                                                                0.1s
+ ⠿ Container 2_docker_sql-pgadmin-1     Created                                                                                                0.1s
+Attaching to 2_docker_sql-pgadmin-1, 2_docker_sql-pgdatabase-1
+2_docker_sql-pgdatabase-1  | 
+2_docker_sql-pgdatabase-1  | PostgreSQL Database directory appears to contain a database; Skipping initialization
+2_docker_sql-pgdatabase-1  | 
+2_docker_sql-pgdatabase-1  | 2023-02-01 00:37:53.429 UTC [1] LOG:  starting PostgreSQL 13.9 (Debian 13.9-1.pgdg110+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+2_docker_sql-pgdatabase-1  | 2023-02-01 00:37:53.431 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2_docker_sql-pgdatabase-1  | 2023-02-01 00:37:53.431 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+2_docker_sql-pgdatabase-1  | 2023-02-01 00:37:53.435 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2_docker_sql-pgdatabase-1  | 2023-02-01 00:37:53.441 UTC [26] LOG:  database system was shut down at 2023-02-01 00:35:04 UTC
+2_docker_sql-pgdatabase-1  | 2023-02-01 00:37:53.447 UTC [1] LOG:  database system is ready to accept connections
+2_docker_sql-pgadmin-1     | NOTE: Configuring authentication for SERVER mode.
+2_docker_sql-pgadmin-1     | 
+2_docker_sql-pgadmin-1     | pgAdmin 4 - Application Initialisation
+2_docker_sql-pgadmin-1     | ======================================
+2_docker_sql-pgadmin-1     | 
+2_docker_sql-pgadmin-1     | [2023-02-01 00:38:10 +0000] [1] [INFO] Starting gunicorn 20.1.0
+2_docker_sql-pgadmin-1     | [2023-02-01 00:38:10 +0000] [1] [INFO] Listening at: http://[::]:80 (1)
+2_docker_sql-pgadmin-1     | [2023-02-01 00:38:10 +0000] [1] [INFO] Using worker: gthread
+2_docker_sql-pgadmin-1     | [2023-02-01 00:38:10 +0000] [90] [INFO] Booting worker with pid: 90

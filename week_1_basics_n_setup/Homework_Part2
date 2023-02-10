@@ -1,7 +1,0 @@
-## Homework #1 Part 2
-
-Terminal Output: 
-
-(base) ronaldajohnson@de-zoomcamp:~/data-engineering-zoomcamp/week_1_basics_n_setup/1_terraform_gcp/terraform$ terraform apply
-google_storage_bucket.data-lake-bucket: Refreshing state... [id=dtc_data_lake_my-rides-ro]
-google_bigquery_dataset.dataset: Refreshing state... [id=projects/my-rides-ro/datasets/trips_data_all]
