@@ -1,10 +1,9 @@
-import io
+
 import os
-import requests
 import pandas as pd
-import pyarrow as pa 
 import pyarrow.csv as pv
 import pyarrow.parquet as pq
+import pyarrow as pa
 from google.cloud import storage
 import logging
 import subprocess
@@ -17,9 +16,8 @@ Pre-reqs:
 """
 
 # services = ['fhv','green','yellow']
-init_url = 'https://github.com/DataTalksClub/nyc-tlc-data/releases/tag/'
-# switch out the bucketname
-BUCKET = os.environ.get("GCP_GCS_BUCKET", "dtc_data_lake_my-rides-ro")
+init_url = 'https://nyc-tlc.s3.amazonaws.com/trip+data/'
+BUCKET = os.environ.get("GCP_GCS_BUCKET", "dtc_data_lake_norse-bond-337916")
 
 table_schema_green = pa.schema(
     [
@@ -84,7 +82,6 @@ def format_to_parquet(src_file, service):
     pq.write_table(table, src_file.replace('.csv', '.parquet'))
 
 
-
 def upload_to_gcs(bucket, object_name, local_file):
     """
     Ref: https://cloud.google.com/storage/docs/uploading-objects#storage-upload-object-python
@@ -103,30 +100,37 @@ def upload_to_gcs(bucket, object_name, local_file):
 def web_to_gcs(year, service):
     for i in range(13):
         if i != 12:
-        
-            # sets the month part of the file_name string
             month = '0'+str(i+1)
             month = month[-2:]
-
-            # csv file_name 
             file_name = service + '_tripdata_' + year + '-' + month + '.csv'
-
-            # download it using requests via a pandas df
             request_url = init_url + file_name
             os.system(f"wget {request_url} -O {file_name}")
             print(f"Local: {file_name}")
-
-            # read it back into a parquet file
+            
+            
             parquetized = format_to_parquet(file_name, service)
             file_name = file_name.replace('.csv', '.parquet')
             print(f"Parquet: {file_name}")
-
-            # upload it to gcs 
+           
             upload_to_gcs(BUCKET, f"{service}/{file_name}", file_name)
             print(f"GCS: {service}/{file_name}")
 
 
 web_to_gcs('2019', 'green')
 web_to_gcs('2020', 'green')
-# web_to_gcs('2019', 'yellow')
-# web_to_gcs('2020', 'yellow')
+web_to_gcs('2019', 'yellow')
+web_to_gcs('2020', 'yellow')
+Footer
+© 2023 GitHub, Inc.
+Footer navigation
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
